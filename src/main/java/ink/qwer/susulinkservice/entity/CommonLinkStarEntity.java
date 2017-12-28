@@ -2,13 +2,13 @@ package ink.qwer.susulinkservice.entity;
 
 import java.util.Date;
 
-public class UserEntity {
+public class CommonLinkStarEntity {
 
     private Integer id;
 
-    private String name;
+    private Integer common_link_id;
 
-    private String password;
+    private Integer user_id;
 
     private Date create_time;
 
@@ -22,20 +22,20 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public Integer getCommon_link_id() {
+        return common_link_id;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCommon_link_id(Integer common_link_id) {
+        this.common_link_id = common_link_id;
     }
 
-    public String getPassword() {
-        return password;
+    public Integer getUser_id() {
+        return user_id;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setUser_id(Integer user_id) {
+        this.user_id = user_id;
     }
 
     public Date getCreate_time() {
