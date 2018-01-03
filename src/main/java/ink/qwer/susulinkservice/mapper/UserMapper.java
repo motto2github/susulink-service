@@ -11,6 +11,6 @@ public interface UserMapper {
     List<UserEntity> getAll();
 
     @Select("SELECT * FROM t_user u WHERE u.id = #{id};")
-    UserEntity getById(Integer id);
+    UserEntity getOne(Integer id);
 
 }
