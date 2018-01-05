@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class UserEntity {
 
-    private Integer id;
+    private int id;
 
     private String name;
 
@@ -14,11 +14,11 @@ public class UserEntity {
 
     private Date update_time;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
