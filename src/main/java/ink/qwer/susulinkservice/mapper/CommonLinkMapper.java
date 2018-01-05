@@ -16,9 +16,10 @@ public interface CommonLinkMapper {
     class DTO {
 
         public String keywords;
-        private String likeKeywords;
         public Integer pageNumber;
         public Integer pageSize;
+
+        private String likeKeywords;
         private Integer beginIndex;
 
     }
@@ -26,17 +27,19 @@ public interface CommonLinkMapper {
     class DynamicSQLProvider {
 
         public String count(DTO dto) {
-            if (dto.keywords == null || "".equals(dto.keywords)) {
-                return "SELECT count(id) FROM t_common_link;";
+            StringBuilder sb = new StringBuilder(" SELECT COUNT(cl.id) FROM t_common_link cl WHERE TRUE ");
+            if (dto.keywords != null && !"".equals(dto.keywords)) {
+                sb.append(" AND ( cl.title LIKE #{likeKeywords} OR cl.href LIKE #{likeKeywords} OR cl.summary LIKE #{likeKeywords} ) ");
+                dto.likeKeywords = "%" + dto.keywords + "%";
             }
-            dto.likeKeywords = "%" + dto.keywords + "%";
-            return "SELECT count(id) FROM t_common_link WHERE title LIKE #{likeKeywords} OR href LIKE #{likeKeywords} OR summary LIKE #{likeKeywords};";
+            sb.append(" ; ");
+            return sb.toString();
         }
 
         public String pageSelect(DTO dto) {
-            StringBuilder sql = new StringBuilder(" SELECT * FROM t_common_link ");
+            StringBuilder sql = new StringBuilder(" SELECT cl.* FROM t_common_link cl WHERE TRUE ");
             if (dto.keywords != null && !"".equals(dto.keywords)) {
-                sql.append(" WHERE title LIKE #{likeKeywords} OR href LIKE #{likeKeywords} OR summary LIKE #{likeKeywords} ");
+                sql.append(" AND ( cl.title LIKE #{likeKeywords} OR cl.href LIKE #{likeKeywords} OR cl.summary LIKE #{likeKeywords} ) ");
                 dto.likeKeywords = "%" + dto.keywords + "%";
             }
             sql.append(" LIMIT #{beginIndex}, #{pageSize}; ");
