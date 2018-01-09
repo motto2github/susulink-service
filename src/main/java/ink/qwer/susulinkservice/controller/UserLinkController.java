@@ -16,7 +16,7 @@ public class UserLinkController {
     private UserLinkService userLinkService;
 
     @PostMapping("/user-link/list")
-    private ResponseDTO list(Integer curUserId, String keywords, Integer pageNumber, Integer pageSize) {
+    private ResponseDTO list(int curUserId, String keywords, int pageNumber, int pageSize) {
         ResponseDTO responseDTO = new ResponseDTO("1", "success");
         List<UserLinkEntity> userLinkEntities = this.userLinkService.pageSelect(curUserId, keywords, pageNumber, pageSize);
         responseDTO.putDatum("links", userLinkEntities);

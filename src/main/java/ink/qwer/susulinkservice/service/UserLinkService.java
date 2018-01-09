@@ -6,8 +6,8 @@ import java.util.List;
 
 public interface UserLinkService {
 
-    int count(Integer userId, String keywords);
+    int count(int userId, String keywords);
 
-    List<UserLinkEntity> pageSelect(Integer userId, String keywords, Integer pageNumber, Integer pageSize);
+    List<UserLinkEntity> pageSelect(int userId, String keywords, int pageNumber, int pageSize);
 
 }

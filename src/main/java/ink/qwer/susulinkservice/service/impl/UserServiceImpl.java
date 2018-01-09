@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public UserEntity getUser(Integer id) {
+    public UserEntity getUser(int id) {
         return this.userMapper.selectById(id);
     }
 
@@ -46,11 +46,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void signIn(UserEntity user) {
-        user.setName(null);
-        user.setPassword(null);
-        user.setCreate_time(null);
+    public void signIn(int id) {
+        UserEntity user = new UserEntity();
+        user.setId(id);
         user.setUpdate_time(new Date());
         this.userMapper.updateUser(user);
+    }
+
+    @Override
+    public boolean resetPassword(int id, String newPassword) {
+        UserEntity user = new UserEntity();
+        user.setId(id);
+        user.setPassword(newPassword);
+        int effectRows = this.userMapper.updateUser(user);
+        return effectRows > 0;
     }
 }

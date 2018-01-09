@@ -4,37 +4,37 @@ import java.util.Date;
 
 public class CommonLinkStarEntity {
 
-    private Integer id;
+    private int id;
 
-    private Integer common_link_id;
+    private int common_link_id;
 
-    private Integer user_id;
+    private int user_id;
 
     private Date create_time;
 
     private Date update_time;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Integer getCommon_link_id() {
+    public int getCommon_link_id() {
         return common_link_id;
     }
 
-    public void setCommon_link_id(Integer common_link_id) {
+    public void setCommon_link_id(int common_link_id) {
         this.common_link_id = common_link_id;
     }
 
-    public Integer getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(Integer user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 

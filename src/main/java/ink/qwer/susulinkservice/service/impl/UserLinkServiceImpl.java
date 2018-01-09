@@ -15,7 +15,7 @@ public class UserLinkServiceImpl implements UserLinkService {
     private UserLinkMapper userLinkMapper;
 
     @Override
-    public int count(Integer userId, String keywords) {
+    public int count(int userId, String keywords) {
         UserLinkMapper.DTO dto = new UserLinkMapper.DTO();
         dto.userId = userId;
         dto.keywords = keywords;
@@ -23,7 +23,7 @@ public class UserLinkServiceImpl implements UserLinkService {
     }
 
     @Override
-    public List<UserLinkEntity> pageSelect(Integer userId, String keywords, Integer pageNumber, Integer pageSize) {
+    public List<UserLinkEntity> pageSelect(int userId, String keywords, int pageNumber, int pageSize) {
         UserLinkMapper.DTO dto = new UserLinkMapper.DTO();
         dto.userId = userId;
         dto.keywords = keywords;

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class CommonLinkEntity {
 
-    private Integer id;
+    private int id;
 
     private String title;
 
@@ -14,17 +14,17 @@ public class CommonLinkEntity {
 
     private String icon_url;
 
-    private Integer sort_number;
+    private int sort_number;
 
     private Date create_time;
 
     private Date update_time;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -60,11 +60,11 @@ public class CommonLinkEntity {
         this.icon_url = icon_url;
     }
 
-    public Integer getSort_number() {
+    public int getSort_number() {
         return sort_number;
     }
 
-    public void setSort_number(Integer sort_number) {
+    public void setSort_number(int sort_number) {
         this.sort_number = sort_number;
     }
 

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class UserLinkEntity {
 
-    private Integer id;
+    private int id;
 
     private String title;
 
@@ -14,17 +14,17 @@ public class UserLinkEntity {
 
     private String icon_url;
 
-    private Integer user_id;
+    private int user_id;
 
     private Date create_time;
 
     private Date update_time;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -60,11 +60,11 @@ public class UserLinkEntity {
         this.icon_url = icon_url;
     }
 
-    public Integer getUser_id() {
+    public int getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(Integer user_id) {
+    public void setUser_id(int user_id) {
         this.user_id = user_id;
     }
 

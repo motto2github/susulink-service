@@ -4,7 +4,7 @@ import ink.qwer.susulinkservice.entity.UserEntity;
 
 public interface UserService {
 
-    UserEntity getUser(Integer id);
+    UserEntity getUser(int id);
 
     UserEntity getUser(String name, String password);
 
@@ -12,6 +12,8 @@ public interface UserService {
 
     boolean existName(String name);
 
-    void signIn(UserEntity user);
+    void signIn(int id);
+
+    boolean resetPassword(int id, String newPassword);
 
 }

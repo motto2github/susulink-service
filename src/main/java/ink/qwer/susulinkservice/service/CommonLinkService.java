@@ -8,6 +8,6 @@ public interface CommonLinkService {
 
     int count(String keywords);
 
-    List<CommonLinkEntity> list(String keywords, Integer pageNumber, Integer pageSize);
+    List<CommonLinkEntity> list(String keywords, int pageNumber, int pageSize);
 
 }

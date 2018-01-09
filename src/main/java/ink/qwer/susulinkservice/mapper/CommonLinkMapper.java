@@ -16,11 +16,11 @@ public interface CommonLinkMapper {
     class DTO {
 
         public String keywords;
-        public Integer pageNumber;
-        public Integer pageSize;
+        public int pageNumber;
+        public int pageSize;
 
         private String likeKeywords;
-        private Integer beginIndex;
+        private int beginIndex;
 
     }
 

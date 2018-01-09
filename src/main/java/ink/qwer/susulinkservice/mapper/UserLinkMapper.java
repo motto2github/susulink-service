@@ -15,13 +15,13 @@ public interface UserLinkMapper {
 
     class DTO {
 
-        public Integer userId;
+        public int userId;
         public String keywords;
-        public Integer pageNumber;
-        public Integer pageSize;
+        public int pageNumber;
+        public int pageSize;
 
         private String likeKeywords;
-        private Integer beginIndex;
+        private int beginIndex;
 
     }
 
@@ -29,7 +29,7 @@ public interface UserLinkMapper {
 
         public String count(DTO dto) {
             StringBuilder sb = new StringBuilder(" SELECT COUNT(ul.id) FROM t_user_link ul WHERE TRUE ");
-            if (dto.userId != null) {
+            if (dto.userId > 0) {
                 sb.append(" AND ul.user_id = #{userId} ");
             }
             if (dto.keywords != null && !"".equals(dto.keywords)) {
@@ -42,7 +42,7 @@ public interface UserLinkMapper {
 
         public String pageSelect(DTO dto) {
             StringBuilder sb = new StringBuilder(" SELECT ul.* FROM t_user_link ul WHERE TRUE ");
-            if (dto.userId != null) {
+            if (dto.userId > 0) {
                 sb.append(" AND ul.user_id = #{userId} ");
             }
             if (dto.keywords != null && !"".equals(dto.keywords)) {

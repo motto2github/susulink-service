@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/user/{id}")
-    private UserEntity getUser(@PathVariable Integer id) {
+    private UserEntity getUser(@PathVariable int id) {
         return userService.getUser(id);
     }
 
@@ -51,9 +51,29 @@ public class UserController {
         if (user == null) {
             return responseDTO.set("-1", "账号或密码错误");
         }
-        this.userService.signIn(user);
+        this.userService.signIn(user.getId());
         responseDTO.set("1", "登录成功").putDatum("user", user);
         return responseDTO;
+    }
+
+    @PostMapping("/user/reset-password")
+    private ResponseDTO resetPassword(int userId, String oldPassword, String newPassword) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        if (oldPassword == null || "".equals(oldPassword) || newPassword == null || "".equals(newPassword)) {
+            return responseDTO.set("-88", "请求参数异常");
+        }
+        UserEntity user = this.userService.getUser(userId);
+        if (user == null) {
+            return responseDTO.set("-1", "找不到该用户");
+        }
+        if (!oldPassword.equals(user.getPassword())) {
+            return responseDTO.set("-1", "旧密码不正确");
+        }
+        boolean ok = this.userService.resetPassword(userId, newPassword);
+        if (!ok) {
+            return responseDTO.set("-1", "修改失败");
+        }
+        return responseDTO.set("1", "修改成功");
     }
 
 }

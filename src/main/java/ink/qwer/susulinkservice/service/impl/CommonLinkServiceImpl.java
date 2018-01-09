@@ -22,7 +22,7 @@ public class CommonLinkServiceImpl implements CommonLinkService {
     }
 
     @Override
-    public List<CommonLinkEntity> list(String keywords, Integer pageNumber, Integer pageSize) {
+    public List<CommonLinkEntity> list(String keywords, int pageNumber, int pageSize) {
         CommonLinkMapper.DTO dto = new CommonLinkMapper.DTO();
         dto.keywords = keywords;
         dto.pageNumber = pageNumber;

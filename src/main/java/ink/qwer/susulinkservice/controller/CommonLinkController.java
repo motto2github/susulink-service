@@ -16,7 +16,7 @@ public class CommonLinkController {
     private CommonLinkService commonLinkService;
 
     @PostMapping("/common-link/list")
-    private ResponseDTO list(String keywords, Integer pageNumber, Integer pageSize) {
+    private ResponseDTO list(String keywords, int pageNumber, int pageSize) {
         ResponseDTO responseDTO = new ResponseDTO("1", "success");
         List<CommonLinkEntity> commonLinks = this.commonLinkService.list(keywords, pageNumber, pageSize);
         responseDTO.putDatum("links", commonLinks);
