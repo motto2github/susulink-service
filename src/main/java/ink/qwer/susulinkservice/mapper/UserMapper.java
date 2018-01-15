@@ -2,6 +2,7 @@ package ink.qwer.susulinkservice.mapper;
 
 import ink.qwer.susulinkservice.entity.UserEntity;
 import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.UpdateProvider;
 
@@ -13,29 +14,24 @@ public interface UserMapper {
     int insert(UserEntity user);
 
 
-    @Select("SELECT u.* FROM t_user u WHERE u.id = #{id};")
-    UserEntity selectById(int id);
+    @UpdateProvider(type = DynamicSQLProvider.class, method = "updateById")
+    int updateById(UserEntity user);
 
-    @Select("SELECT u.* FROM t_user u WHERE u.name = #{name};")
-    UserEntity selectByName(String name);
+
+    @Select("SELECT u.* FROM t_user u WHERE u.id = #{id};")
+    UserEntity selectById(@Param("id") int id);
 
     @Select("SELECT u.* FROM t_user u WHERE u.name = #{name} AND u.password = #{password};")
-    UserEntity selectByNameAndPassword(DTO dto);
-
-    @UpdateProvider(type = DynamicSQLProvider.class, method = "updateUser")
-    int updateUser(UserEntity user);
+    UserEntity selectByNameAndPassword(@Param("name") String name, @Param("password") String password);
 
 
-    class DTO {
+    @Select("SELECT count(u.id) FROM t_user u WHERE u.name = #{name};")
+    int countByName(@Param("name") String name);
 
-        public String name;
-        public String password;
-
-    }
 
     class DynamicSQLProvider {
 
-        public String updateUser(UserEntity user) {
+        public String updateById(UserEntity user) {
             StringBuilder sb = new StringBuilder(" UPDATE t_user u SET u.id = u.id ");
             String name = user.getName();
             if (name != null && !"".equals(name)) {

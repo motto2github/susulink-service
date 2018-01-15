@@ -1,13 +1,9 @@
 package ink.qwer.susulinkservice.service;
 
-import ink.qwer.susulinkservice.entity.CommonLinkEntity;
-
-import java.util.List;
+import ink.qwer.susulinkservice.dto.ResponseDTO;
 
 public interface CommonLinkService {
 
-    int count(String keywords);
-
-    List<CommonLinkEntity> list(String keywords, int pageNumber, int pageSize);
+    ResponseDTO pageSelectForController(String keywords, int pageNumber, int pageSize);
 
 }

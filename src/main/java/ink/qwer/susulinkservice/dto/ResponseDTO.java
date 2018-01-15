@@ -1,4 +1,4 @@
-package ink.qwer.susulinkservice.controller.dto;
+package ink.qwer.susulinkservice.dto;
 
 import java.util.HashMap;
 import java.util.Map;
