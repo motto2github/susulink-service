@@ -59,7 +59,17 @@ public class UserLinkServiceImpl implements UserLinkService {
         List<UserLinkEntity> userLinkEntities = this.userLinkMapper.pageSelect(dto);
         responseDTO.putDatum("links", userLinkEntities);
         responseDTO.putDatum("totalCount", this.count(userId, keywords));
-        return responseDTO.set("1", "success");
+        return responseDTO.set("1", "查询成功");
+    }
+
+    @Override
+    public ResponseDTO deleteForController(int id) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        int effectRows = this.userLinkMapper.delete(id);
+        if (effectRows != 1) {
+            return responseDTO.set("-99", "数据库异常，请稍后重试");
+        }
+        return responseDTO.set("1", "删除成功");
     }
 
 
@@ -77,4 +87,25 @@ public class UserLinkServiceImpl implements UserLinkService {
         return this.userLinkMapper.selectByTitleAndUserId(title, userId) != null;
     }
 
+    @Override
+    public ResponseDTO updateForController(UserLinkEntity userLinkEntity) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        int id = userLinkEntity.getId();
+        String title = userLinkEntity.getTitle();
+        String href = userLinkEntity.getHref();
+        int userId = userLinkEntity.getUser_id();
+        if (title == null || "".equals(title) || href == null || "".equals(href)) {
+            return responseDTO.set("-88", "请求参数异常");
+        }
+        int count = this.userLinkMapper.countForUpdateCheck(userId, title, id);
+        if (count > 0) {
+            return responseDTO.set("-1", "该标题已存在");
+        }
+        userLinkEntity.setUpdate_time(new Date());
+        int effectRows = this.userLinkMapper.updateById(userLinkEntity);
+        if (effectRows != 1) {
+            return responseDTO.set("-99", "数据库异常，请稍后重试");
+        }
+        return responseDTO.set("1", "修改成功");
+    }
 }

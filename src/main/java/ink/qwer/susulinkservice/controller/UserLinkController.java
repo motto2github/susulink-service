@@ -29,4 +29,21 @@ public class UserLinkController {
         return this.userLinkService.insertForController(userLink);
     }
 
+    @PostMapping("/user-link/remove")
+    private ResponseDTO remove(int id) {
+        return this.userLinkService.deleteForController(id);
+    }
+
+    @PostMapping("/user-link/update")
+    private ResponseDTO update(int _id, String title, String href, String summary, String iconUrl, int owner) {
+        UserLinkEntity userLink = new UserLinkEntity();
+        userLink.setId(_id);
+        userLink.setTitle(title);
+        userLink.setHref(href);
+        userLink.setSummary(summary);
+        userLink.setIcon_url(iconUrl);
+        userLink.setUser_id(owner);
+        return this.userLinkService.updateForController(userLink);
+    }
+
 }
