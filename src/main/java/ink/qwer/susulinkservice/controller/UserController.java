@@ -1,11 +1,8 @@
 package ink.qwer.susulinkservice.controller;
 
 import ink.qwer.susulinkservice.dto.ResponseDTO;
-import ink.qwer.susulinkservice.entity.UserEntity;
 import ink.qwer.susulinkservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,11 +11,6 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @GetMapping("/user/{id}")
-    private UserEntity getUser(@PathVariable int id) {
-        return userService.select(id);
-    }
 
     @PostMapping("/user/sign-up")
     private ResponseDTO signUp(String name, String password) {

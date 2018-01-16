@@ -46,4 +46,9 @@ public class UserLinkController {
         return this.userLinkService.updateForController(userLink);
     }
 
+    @PostMapping("/user-link/findone")
+    private ResponseDTO findOne(int id, int userId) {
+        return this.userLinkService.findOneForController(id, userId);
+    }
+
 }

@@ -11,11 +11,11 @@ public interface UserLinkService {
 
     ResponseDTO deleteForController(int id);
 
-
     int count(int userId, String keywords);
-
 
     boolean existTitleForSomeUser(String title, int userId);
 
     ResponseDTO updateForController(UserLinkEntity userLink);
+
+    ResponseDTO findOneForController(int id, int userId);
 }

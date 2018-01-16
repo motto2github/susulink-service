@@ -11,10 +11,8 @@ public interface UserLinkMapper {
     @Insert("INSERT t_user_link(title, href, summary, icon_url, user_id, create_time, update_time) VALUES(#{title}, #{href}, #{summary}, #{icon_url}, #{user_id}, #{create_time}, #{update_time});")
     int insert(UserLinkEntity userLinkEntity);
 
-
     @Delete("DELETE FROM t_user_link WHERE id = #{id};")
     int delete(@Param("id") int id);
-
 
     @Select("SELECT ul.* FROM t_user_link ul WHERE ul.title = #{title} AND ul.user_id = #{userId};")
     UserLinkEntity selectByTitleAndUserId(@Param("title") String title, @Param("userId") int userId);
@@ -25,7 +23,6 @@ public interface UserLinkMapper {
      */
     @SelectProvider(type = DynamicSQLProvider.class, method = "pageSelect")
     List<UserLinkEntity> pageSelect(DTO dto);
-
 
     /**
      * @param dto {userId, keywords}
@@ -40,6 +37,8 @@ public interface UserLinkMapper {
     @UpdateProvider(type = DynamicSQLProvider.class, method = "updateById")
     int updateById(UserLinkEntity userLinkEntity);
 
+    @Select("SELECT ul.* FROM t_user_link ul WHERE ul.id = #{id};")
+    UserLinkEntity selectById(@Param("id") int id);
 
     class DTO {
 

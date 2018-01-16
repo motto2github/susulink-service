@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class UserLinkServiceImpl implements UserLinkService {
@@ -56,10 +55,10 @@ public class UserLinkServiceImpl implements UserLinkService {
         dto.keywords = keywords;
         dto.pageNumber = pageNumber;
         dto.pageSize = pageSize;
-        List<UserLinkEntity> userLinkEntities = this.userLinkMapper.pageSelect(dto);
-        responseDTO.putDatum("links", userLinkEntities);
-        responseDTO.putDatum("totalCount", this.count(userId, keywords));
-        return responseDTO.set("1", "查询成功");
+        return responseDTO
+                .putDatum("links", this.userLinkMapper.pageSelect(dto))
+                .putDatum("totalCount", this.count(userId, keywords))
+                .set("1", "查询成功");
     }
 
     @Override
@@ -107,5 +106,17 @@ public class UserLinkServiceImpl implements UserLinkService {
             return responseDTO.set("-99", "数据库异常，请稍后重试");
         }
         return responseDTO.set("1", "修改成功");
+    }
+
+    @Override
+    public ResponseDTO findOneForController(int id, int userId) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        UserLinkEntity userLinkEntity = this.userLinkMapper.selectById(id);
+        if (userLinkEntity == null) {
+            return responseDTO.set("-1", "找不到该信息");
+        }
+        return responseDTO
+                .putDatum("link", userLinkEntity)
+                .set("1", "查找成功");
     }
 }
