@@ -200,8 +200,6 @@ public class UserLinkServiceImpl implements UserLinkService {
             origin = originMatcher.group(1);
         }
 
-        System.out.println(HOT_LINK_INFO_KVS);
-
         LinkInfoDTO linkInfoDTO = HOT_LINK_INFO_KVS.get(origin);
         if (linkInfoDTO != null) {
             return responseDTO.putDatum("info", linkInfoDTO).set("1", "操作成功");
