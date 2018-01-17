@@ -18,4 +18,7 @@ public interface UserLinkService {
     ResponseDTO updateForController(UserLinkEntity userLink);
 
     ResponseDTO findOneForController(int id, int userId);
+
+    ResponseDTO parseLinkForController(String link);
+
 }

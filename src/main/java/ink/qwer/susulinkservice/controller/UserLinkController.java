@@ -51,4 +51,9 @@ public class UserLinkController {
         return this.userLinkService.findOneForController(id, userId);
     }
 
+    @PostMapping("/user-link/parse-link")
+    private ResponseDTO parseLink(String link) {
+        return this.userLinkService.parseLinkForController(link);
+    }
+
 }

@@ -6,10 +6,19 @@ import ink.qwer.susulinkservice.entity.UserLinkEntity;
 import ink.qwer.susulinkservice.mapper.UserLinkMapper;
 import ink.qwer.susulinkservice.service.UserLinkService;
 import ink.qwer.susulinkservice.service.UserService;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserLinkServiceImpl implements UserLinkService {
@@ -19,6 +28,53 @@ public class UserLinkServiceImpl implements UserLinkService {
 
     @Autowired
     private UserService userService;
+
+    private static class LinkInfoDTO {
+
+        public String title;
+        public String iconUrl;
+        public String keywords;
+        public String description;
+
+        private LinkInfoDTO() {
+        }
+
+        private LinkInfoDTO(String title, String iconUrl, String keywords, String description) {
+            this.title = title;
+            this.iconUrl = iconUrl;
+            this.keywords = keywords;
+            this.description = description;
+        }
+
+        @Override
+        public String toString() {
+            return "LinkInfoDTO{" +
+                    "title='" + title + '\'' +
+                    ", iconUrl='" + iconUrl + '\'' +
+                    ", keywords='" + keywords + '\'' +
+                    ", description='" + description + '\'' +
+                    '}' + '\n';
+        }
+    }
+
+    private static final Map<String, LinkInfoDTO> HOT_LINK_INFO_KVS = new HashMap<String, LinkInfoDTO>();
+
+    static {
+
+        LinkInfoDTO bd = new LinkInfoDTO("百度一下，你就知道", "https://www.baidu.com/favicon.ico", "百度搜索", "全球最大的中文搜索引擎、致力于让网民更便捷地获取信息，找到所求。");
+        LinkInfoDTO jd = new LinkInfoDTO("京东(JD.COM)-正品低价、品质保障、配送及时、轻松购物！", "https://www.jd.com/favicon.ico", "网上购物,网上商城,手机,笔记本,电脑,MP3,CD,VCD,DV,相机,数码,配件,手表,存储卡,京东", "京东JD.COM-专业的综合网上购物商城,销售家电、数码通讯、电脑、家居百货、服装服饰、母婴、图书、食品等数万个品牌优质商品.便捷、诚信的服务，为您提供愉悦的网上购物体验!");
+
+        HOT_LINK_INFO_KVS.put("http://baidu.com", bd);
+        HOT_LINK_INFO_KVS.put("https://baidu.com", bd);
+        HOT_LINK_INFO_KVS.put("http://www.baidu.com", bd);
+        HOT_LINK_INFO_KVS.put("https://www.baidu.com", bd);
+
+        HOT_LINK_INFO_KVS.put("http://jd.com", jd);
+        HOT_LINK_INFO_KVS.put("https://jd.com", jd);
+        HOT_LINK_INFO_KVS.put("http://www.jd.com", jd);
+        HOT_LINK_INFO_KVS.put("https://www.jd.com", jd);
+
+    }
 
 
     @Override
@@ -119,4 +175,95 @@ public class UserLinkServiceImpl implements UserLinkService {
                 .putDatum("link", userLinkEntity)
                 .set("1", "查找成功");
     }
+
+    @Override
+    public ResponseDTO parseLinkForController(String link) {
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        if (link == null || "".equals(link)) {
+            return responseDTO.set("-88", "请求参数异常");
+        }
+
+        String protocol = ""; // like http:
+        Matcher protocolMatcher = Pattern.compile("^([^:]+:)//").matcher(link);
+        if (protocolMatcher.find()) {
+            protocol = protocolMatcher.group(1);
+        }
+
+        if (!"http:".equalsIgnoreCase(protocol) && !"https:".equalsIgnoreCase(protocol)) {
+            return responseDTO.set("-88", "请求参数异常");
+        }
+
+        String origin = ""; // like http://www.baidu.com
+        Matcher originMatcher = Pattern.compile("(^[^:]+://[^/?]+)").matcher(link);
+        if (originMatcher.find()) {
+            origin = originMatcher.group(1);
+        }
+
+        System.out.println(HOT_LINK_INFO_KVS);
+
+        LinkInfoDTO linkInfoDTO = HOT_LINK_INFO_KVS.get(origin);
+        if (linkInfoDTO != null) {
+            return responseDTO.putDatum("info", linkInfoDTO).set("1", "操作成功");
+        }
+
+        Document doc = null;
+        try {
+            doc = Jsoup.connect(link)
+                    .userAgent("Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0; MALC)")
+                    .get();
+            if (doc == null) throw new IOException();
+        } catch (IOException e) {
+            return responseDTO.set("-1", "抱歉，暂未能读取到默认信息");
+        }
+
+        Element head = doc.head();
+
+        linkInfoDTO = new LinkInfoDTO();
+
+        Element title = head.getElementsByTag("title").first();
+        linkInfoDTO.title = title == null ? "" : title.text();
+
+        Elements links = head.getElementsByTag("link");
+        for (Element element : links) {
+            String rel = element.attr("rel");
+            if (rel.matches("(?i)shortcut|icon|shortcut\\s{1,}icon|icon\\s{1,}shortcut")) {
+                String iconUrl = element.attr("href");
+                if (iconUrl.matches("(?i)data:image/.+")) {
+                    continue;
+                }
+                if (iconUrl.matches("(?i)https?://.+")) {
+                    // nothing
+                } else if (iconUrl.matches("//.+")) {
+                    iconUrl = protocol + iconUrl;
+                } else if (iconUrl.matches("/.+")) {
+                    iconUrl = origin + iconUrl;
+                } else {
+                    iconUrl = origin + '/' + iconUrl;
+                }
+                linkInfoDTO.iconUrl = iconUrl;
+                break;
+            }
+        }
+
+        Elements metas = head.getElementsByTag("meta");
+        for (Element element : metas) {
+            String name = element.attr("name");
+            if ("keywords".equalsIgnoreCase(name)) {
+                linkInfoDTO.keywords = element.attr("content");
+            } else if ("description".equalsIgnoreCase(name)) {
+                linkInfoDTO.description = element.attr("content");
+            }
+            String keywords = linkInfoDTO.keywords;
+            String description = linkInfoDTO.description;
+            if (keywords != null && !"".equals(keywords) && description != null && !"".equals(description)) {
+                break;
+            }
+        }
+
+        HOT_LINK_INFO_KVS.put(origin, linkInfoDTO);
+
+        return responseDTO.putDatum("info", linkInfoDTO).set("1", "操作成功");
+    }
+
 }
