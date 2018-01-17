@@ -13,8 +13,8 @@ public class CommonLinkController {
     private CommonLinkService commonLinkService;
 
     @PostMapping("/common-link/list")
-    private ResponseDTO list(String keywords, int pageNumber, int pageSize) {
-        return this.commonLinkService.pageSelectForController(keywords, pageNumber, pageSize);
+    private ResponseDTO list(String keywords, int page_number, int page_size) {
+        return this.commonLinkService.pageSelectForController(keywords, page_number, page_size);
     }
 
 }

@@ -23,8 +23,8 @@ public class UserController {
     }
 
     @PostMapping("/user/reset-password")
-    private ResponseDTO resetPassword(int userId, String oldPassword, String newPassword) {
-        return this.userService.resetPasswordForController(userId, oldPassword, newPassword);
+    private ResponseDTO resetPassword(int userId, String old_password, String new_password) {
+        return this.userService.resetPasswordForController(userId, old_password, new_password);
     }
 
 }
