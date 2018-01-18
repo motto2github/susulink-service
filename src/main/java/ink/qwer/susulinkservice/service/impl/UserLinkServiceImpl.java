@@ -203,7 +203,7 @@ public class UserLinkServiceImpl implements UserLinkService {
             origin = originMatcher.group(1);
         }
 
-        LinkInfoDTO linkInfoDTO = HOT_LINK_INFO_KVS.get(origin);
+        LinkInfoDTO linkInfoDTO = HOT_LINK_INFO_KVS.get(link);
         if (linkInfoDTO != null) {
             return responseDTO.putDatum("link_info", linkInfoDTO).set("1", "操作成功");
         }
@@ -248,6 +248,9 @@ public class UserLinkServiceImpl implements UserLinkService {
                 linkInfoDTO.icon_url = icon_url;
             }
         }
+        if ("".equals(linkInfoDTO.icon_url)) {
+            linkInfoDTO.icon_url = origin + "/favicon.ico";
+        }
 
         Elements metas = head.getElementsByTag("meta");
         for (Element element : metas) {
@@ -264,7 +267,7 @@ public class UserLinkServiceImpl implements UserLinkService {
             }
         }
 
-        HOT_LINK_INFO_KVS.put(origin, linkInfoDTO);
+        HOT_LINK_INFO_KVS.put(link, linkInfoDTO);
 
         return responseDTO.putDatum("link_info", linkInfoDTO).set("1", "操作成功");
     }
