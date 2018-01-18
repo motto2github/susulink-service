@@ -7,7 +7,7 @@ public final class ResponseDTO {
 
     private String code;
 
-    private String message;
+    private String msg;
 
     private final Map<String, Object> data = new HashMap<String, Object>();
 
@@ -15,20 +15,20 @@ public final class ResponseDTO {
         this("0", "");
     }
 
-    public ResponseDTO(String code, String message) {
+    public ResponseDTO(String code, String msg) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
     }
 
-    public final ResponseDTO set(String code, String message) {
+    public final ResponseDTO set(String code, String msg) {
         this.code = code;
-        this.message = message;
+        this.msg = msg;
         return this;
     }
 
     public final ResponseDTO reset() {
         this.code = "0";
-        this.message = "";
+        this.msg = "";
         this.data.clear();
         return this;
     }
@@ -56,8 +56,8 @@ public final class ResponseDTO {
         return code;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMsg() {
+        return msg;
     }
 
     public Map<String, Object> getData() {

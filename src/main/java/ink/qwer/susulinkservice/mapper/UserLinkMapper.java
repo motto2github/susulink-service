@@ -69,15 +69,46 @@ public interface UserLinkMapper {
         }
 
         public String pageSelect(DTO dto) {
-            StringBuilder sb = new StringBuilder(" SELECT ul.* FROM t_user_link ul WHERE TRUE ");
+            StringBuilder sb = new StringBuilder(" SELECT ul.* ");
+
+            boolean hasKeywords = dto.keywords != null && !"".equals(dto.keywords);
+
+            if (hasKeywords) {
+                dto.likeKeywords = "%" + dto.keywords + "%";
+            }
+
+            if (hasKeywords) {
+                sb.append(" , ul.title LIKE #{likeKeywords} title_is_like ")
+                        .append(" , ul.href LIKE #{likeKeywords} href_is_like ")
+                        .append(" , ul.summary LIKE #{likeKeywords} summary_is_like ");
+            }
+
+            sb.append(" FROM t_user_link ul WHERE TRUE ");
+
             if (dto.userId > 0) {
                 sb.append(" AND ul.user_id = #{userId} ");
             }
-            if (dto.keywords != null && !"".equals(dto.keywords)) {
-                sb.append(" AND ( ul.title LIKE #{likeKeywords} OR ul.href LIKE #{likeKeywords} OR ul.summary LIKE #{likeKeywords} ) ");
-                dto.likeKeywords = "%" + dto.keywords + "%";
+            if (hasKeywords) {
+                sb.append(" AND ( ")
+                        .append(" ul.title LIKE #{likeKeywords} ")
+                        .append(" OR ")
+                        .append(" ul.href LIKE #{likeKeywords} ")
+                        .append(" OR ")
+                        .append(" ul.summary LIKE #{likeKeywords} ")
+                        .append(" ) ");
             }
-            sb.append(" LIMIT #{beginIndex}, #{pageSize}; ");
+
+            sb.append(" ORDER BY ");
+
+            if (hasKeywords) {
+                sb.append(" title_is_like DESC, ")
+                        .append(" href_is_like DESC, ")
+                        .append(" summary_is_like DESC, ");
+            }
+
+            sb.append(" ul.id ASC ")
+                    .append(" LIMIT #{beginIndex}, #{pageSize}; ");
+
             dto.beginIndex = (dto.pageNumber - 1) * dto.pageSize;
             return sb.toString();
         }
