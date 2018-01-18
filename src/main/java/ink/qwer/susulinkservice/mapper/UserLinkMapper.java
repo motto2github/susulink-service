@@ -123,14 +123,8 @@ public interface UserLinkMapper {
             if (href != null && !"".equals(href)) {
                 sb.append(" , ul.href = #{href} ");
             }
-            String summary = userLinkEntity.getSummary();
-            if (summary != null && !"".equals(summary)) {
-                sb.append(" , ul.summary = #{summary} ");
-            }
-            String iconUrl = userLinkEntity.getIcon_url();
-            if (iconUrl != null && !"".equals(iconUrl)) {
-                sb.append(" , ul.icon_url = #{icon_url} ");
-            }
+            sb.append(" , ul.summary = #{summary} ");
+            sb.append(" , ul.icon_url = #{icon_url} ");
             Date createTime = userLinkEntity.getCreate_time();
             if (createTime != null) {
                 sb.append(" , ul.create_time = #{create_time} ");
