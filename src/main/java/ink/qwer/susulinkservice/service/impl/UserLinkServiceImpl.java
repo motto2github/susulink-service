@@ -31,10 +31,10 @@ public class UserLinkServiceImpl implements UserLinkService {
 
     private static class LinkInfoDTO {
 
-        public String title;
-        public String icon_url;
-        public String keywords;
-        public String description;
+        public String title = "";
+        public String icon_url = "";
+        public String keywords = "";
+        public String description = "";
 
         private LinkInfoDTO() {
         }
@@ -233,6 +233,9 @@ public class UserLinkServiceImpl implements UserLinkService {
                 if (icon_url.matches("(?i)data:image/.+")) {
                     continue;
                 }
+                if (!"".equals(linkInfoDTO.icon_url) && !icon_url.matches("(?i)[^\\.]+\\.ico(\\?[^\\?]*)?$")) {
+                    continue;
+                }
                 if (icon_url.matches("(?i)https?://.+")) {
                     // nothing
                 } else if (icon_url.matches("//.+")) {
@@ -243,7 +246,6 @@ public class UserLinkServiceImpl implements UserLinkService {
                     icon_url = origin + '/' + icon_url;
                 }
                 linkInfoDTO.icon_url = icon_url;
-                break;
             }
         }
 
