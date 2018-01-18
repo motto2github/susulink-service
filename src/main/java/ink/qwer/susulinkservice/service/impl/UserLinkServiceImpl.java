@@ -152,7 +152,7 @@ public class UserLinkServiceImpl implements UserLinkService {
         if (id < 1 || userId < 1 || title == null || "".equals(title) || href == null || "".equals(href)) {
             return responseDTO.set("-88", "请求参数异常");
         }
-        if (this.userService.select(id) == null) {
+        if (this.userService.select(userId) == null) {
             return responseDTO.set("-1", "该用户不存在");
         }
         int count = this.userLinkMapper.countForUpdateCheck(userId, title, id);
