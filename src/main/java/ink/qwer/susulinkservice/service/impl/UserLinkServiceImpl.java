@@ -32,16 +32,16 @@ public class UserLinkServiceImpl implements UserLinkService {
     private static class LinkInfoDTO {
 
         public String title;
-        public String iconUrl;
+        public String icon_url;
         public String keywords;
         public String description;
 
         private LinkInfoDTO() {
         }
 
-        private LinkInfoDTO(String title, String iconUrl, String keywords, String description) {
+        private LinkInfoDTO(String title, String icon_url, String keywords, String description) {
             this.title = title;
-            this.iconUrl = iconUrl;
+            this.icon_url = icon_url;
             this.keywords = keywords;
             this.description = description;
         }
@@ -50,7 +50,7 @@ public class UserLinkServiceImpl implements UserLinkService {
         public String toString() {
             return "LinkInfoDTO{" +
                     "title='" + title + '\'' +
-                    ", iconUrl='" + iconUrl + '\'' +
+                    ", icon_url='" + icon_url + '\'' +
                     ", keywords='" + keywords + '\'' +
                     ", description='" + description + '\'' +
                     '}' + '\n';
@@ -149,8 +149,11 @@ public class UserLinkServiceImpl implements UserLinkService {
         String title = userLinkEntity.getTitle();
         String href = userLinkEntity.getHref();
         int userId = userLinkEntity.getUser_id();
-        if (title == null || "".equals(title) || href == null || "".equals(href)) {
+        if (id < 1 || userId < 1 || title == null || "".equals(title) || href == null || "".equals(href)) {
             return responseDTO.set("-88", "请求参数异常");
+        }
+        if (this.userService.select(id) == null) {
+            return responseDTO.set("-1", "该用户不存在");
         }
         int count = this.userLinkMapper.countForUpdateCheck(userId, title, id);
         if (count > 0) {
@@ -202,7 +205,7 @@ public class UserLinkServiceImpl implements UserLinkService {
 
         LinkInfoDTO linkInfoDTO = HOT_LINK_INFO_KVS.get(origin);
         if (linkInfoDTO != null) {
-            return responseDTO.putDatum("linkInfo", linkInfoDTO).set("1", "操作成功");
+            return responseDTO.putDatum("link_info", linkInfoDTO).set("1", "操作成功");
         }
 
         Document doc = null;
@@ -226,20 +229,20 @@ public class UserLinkServiceImpl implements UserLinkService {
         for (Element element : links) {
             String rel = element.attr("rel");
             if (rel.matches("(?i)shortcut|icon|shortcut\\s{1,}icon|icon\\s{1,}shortcut")) {
-                String iconUrl = element.attr("href");
-                if (iconUrl.matches("(?i)data:image/.+")) {
+                String icon_url = element.attr("href");
+                if (icon_url.matches("(?i)data:image/.+")) {
                     continue;
                 }
-                if (iconUrl.matches("(?i)https?://.+")) {
+                if (icon_url.matches("(?i)https?://.+")) {
                     // nothing
-                } else if (iconUrl.matches("//.+")) {
-                    iconUrl = protocol + iconUrl;
-                } else if (iconUrl.matches("/.+")) {
-                    iconUrl = origin + iconUrl;
+                } else if (icon_url.matches("//.+")) {
+                    icon_url = protocol + icon_url;
+                } else if (icon_url.matches("/.+")) {
+                    icon_url = origin + icon_url;
                 } else {
-                    iconUrl = origin + '/' + iconUrl;
+                    icon_url = origin + '/' + icon_url;
                 }
-                linkInfoDTO.iconUrl = iconUrl;
+                linkInfoDTO.icon_url = icon_url;
                 break;
             }
         }
@@ -261,7 +264,7 @@ public class UserLinkServiceImpl implements UserLinkService {
 
         HOT_LINK_INFO_KVS.put(origin, linkInfoDTO);
 
-        return responseDTO.putDatum("linkInfo", linkInfoDTO).set("1", "操作成功");
+        return responseDTO.putDatum("link_info", linkInfoDTO).set("1", "操作成功");
     }
 
 }
