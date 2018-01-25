@@ -275,12 +275,12 @@ public class UserLinkServiceImpl implements UserLinkService {
 
     private String filterHTMLScript(String str) {
         if (str == null) return "";
-        return str.replaceAll("<([^>]+)>", "[$1]");
+        return str.replaceAll("<([^>]+)>", "&lt;$1&gt;");
     }
 
     private UserLinkEntity filterHTMLScript(UserLinkEntity link) {
         link.setTitle(this.filterHTMLScript(link.getTitle()));
-        link.setSummary(this.filterHTMLScript(link.getSummary()).replaceAll("\\[\\s*br\\s*\\]", "<br>"));
+        link.setSummary(this.filterHTMLScript(link.getSummary()).replaceAll("&lt;\\s*br\\s*&gt;", "<br>"));
         return link;
     }
 
