@@ -40,6 +40,12 @@ public class Test {
 //
 //        System.out.println(hotLinkInfoKVs);
 
+//        String str = "alsdfjlasdfkj<      script type=\"text/script\"   >alert(1);</script><br       >asdflaksdjflkaj<br           >sdasldfjalsdf<html>asdfasdfasdf</html>asdfasdf<iframe     src=\"haha\"    >asdfasdfasdf</iframe>asdfasdf";
+//        str = str.replaceAll("<([^>]+)>", "[$1]")
+//            .replaceAll("\\[\\s*br\\s*\\]", "<br>");
+//        System.out.println(str);
+
+
     }
 
 }

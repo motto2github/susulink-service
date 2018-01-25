@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -112,7 +113,7 @@ public class UserLinkServiceImpl implements UserLinkService {
         dto.pageNumber = pageNumber;
         dto.pageSize = pageSize;
         return responseDTO
-                .putDatum("links", this.userLinkMapper.pageSelect(dto))
+                .putDatum("links", this.filterHTMLScript(this.userLinkMapper.pageSelect(dto)))
                 .putDatum("totalCount", this.count(userId, keywords))
                 .set("1", "查询成功");
     }
@@ -270,6 +271,25 @@ public class UserLinkServiceImpl implements UserLinkService {
         HOT_LINK_INFO_KVS.put(link, linkInfoDTO);
 
         return responseDTO.putDatum("link_info", linkInfoDTO).set("1", "操作成功");
+    }
+
+    private String filterHTMLScript(String str) {
+        if (str == null) return null;
+        return str.replaceAll("<([^>]+)>", "[$1]")
+                .replaceAll("\\[\\s*br\\s*\\]", "<br>");
+    }
+
+    private UserLinkEntity filterHTMLScript(UserLinkEntity link) {
+        link.setTitle(this.filterHTMLScript(link.getTitle()));
+        link.setSummary(this.filterHTMLScript(link.getSummary()));
+        return link;
+    }
+
+    private List<UserLinkEntity> filterHTMLScript(List<UserLinkEntity> links) {
+        for (UserLinkEntity link : links) {
+            this.filterHTMLScript(link);
+        }
+        return links;
     }
 
 }
