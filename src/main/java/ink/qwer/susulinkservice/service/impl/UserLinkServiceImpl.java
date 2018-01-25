@@ -280,7 +280,7 @@ public class UserLinkServiceImpl implements UserLinkService {
 
     private UserLinkEntity filterHTMLScript(UserLinkEntity link) {
         link.setTitle(this.filterHTMLScript(link.getTitle()));
-        link.setSummary(this.filterHTMLScript(link.getSummary()).replaceAll("\\[\\s*br\\s*\\]", "\\n<br>\\n"));
+        link.setSummary(this.filterHTMLScript(link.getSummary()).replaceAll("\\[\\s*br\\s*\\]", "<br>"));
         return link;
     }
 
