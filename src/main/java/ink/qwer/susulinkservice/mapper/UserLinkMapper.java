@@ -106,7 +106,7 @@ public interface UserLinkMapper {
                         .append(" summary_is_like DESC, ");
             }
 
-            sb.append(" ul.id ASC ")
+            sb.append(" ul.id DESC ")
                     .append(" LIMIT #{beginIndex}, #{pageSize}; ");
 
             dto.beginIndex = (dto.pageNumber - 1) * dto.pageSize;

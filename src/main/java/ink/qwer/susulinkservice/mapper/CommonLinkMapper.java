@@ -69,7 +69,7 @@ public interface CommonLinkMapper {
                         .append(" summary_is_like DESC, ");
             }
 
-            sql.append(" cl.id ASC ")
+            sql.append(" cl.id DESC ")
                     .append(" LIMIT #{beginIndex}, #{pageSize}; ");
 
             dto.beginIndex = (dto.pageNumber - 1) * dto.pageSize;
